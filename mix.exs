@@ -17,7 +17,7 @@ defmodule ServoKnob.Mixfile do
 
   defp deps do
     [
-      {:grovepi, path: "../.."}
+      {:grovepi, path: "../grovepi"}
     ]
   end
 end
