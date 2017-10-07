@@ -1,21 +1,21 @@
 defmodule ServoKnob.Application do
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
-
   use Application
+
+  @potentiometer_pin 16 # Port A2
+  @led_pin 3 # Port D3
 
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    # Define workers and child supervisors to be supervised
     children = [
-      # Starts a worker by calling: ServoKnob.Worker.start_link(arg1, arg2, arg3)
-      # worker(ServoKnob.Worker, [arg1, arg2, arg3]),
+      # Start the GrovePi sensor that we want
+      worker(GrovePi.Potentiometer, [@potentiometer_pin]),
+
+      # Start the main app
+      worker(ServoKnob, [[@potentiometer_pin, @led_pin]]),
     ]
 
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: ServoKnob.Supervisor]
     Supervisor.start_link(children, opts)
   end
